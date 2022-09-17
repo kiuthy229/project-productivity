@@ -2,6 +2,9 @@ import React, { useEffect, useRef, useState } from "react";
 import io from "socket.io-client";
 import Peer from "simple-peer";
 import styled from "styled-components";
+import * as tf from "@tensorflow/tfjs";
+import * as cocossd from "@tensorflow-models/coco-ssd"
+import { drawRect } from "./utilities";
 
 const Container = styled.div`
     padding: 20px;
@@ -42,7 +45,50 @@ const Room = (props) => {
     const socketRef = useRef();
     const userVideo = useRef();
     const peersRef = useRef([]);
+    const canvasRef = useRef(null);
     const roomID = props.match.params.roomID;
+
+    const runCoco = async () => {
+        const net = await cocossd.load();
+        
+        //  Loop and detect hands
+        setInterval(() => {
+          detect(net);
+        }, 10);
+      };
+    
+      const detect = async (net) => {
+        // Check data is available
+        if (
+          typeof userVideo.current !== "undefined" &&
+          userVideo.current !== null &&
+          userVideo.current.video.readyState === 4
+        ) {
+          const video = userVideo.current.video;
+          const videoWidth = userVideo.current.video.videoWidth;
+          const videoHeight = userVideo.current.video.videoHeight;
+    
+          userVideo.current.video.width = videoWidth;
+          userVideo.current.video.height = videoHeight;
+    
+          userVideo.current.width = videoWidth;
+          userVideo.current.height = videoHeight;
+    
+          const obj = await net.detect(video);
+          for (var i in obj){
+            if(obj[i].class === "cell phone" || obj[i].class === "remote"){
+              console.log("are you holding a phone?")
+            }
+          }
+    
+          // Draw mesh
+          const ctx = canvasRef.current.getContext("2d");
+    
+          drawRect(obj, ctx);
+        }
+      };
+    
+      useEffect(()=>{runCoco()},[]);
 
     useEffect(() => {
         socketRef.current = io.connect("/");
