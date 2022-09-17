@@ -3,8 +3,11 @@ import io from "socket.io-client";
 import Peer from "simple-peer";
 import styled from "styled-components";
 import * as tf from "@tensorflow/tfjs";
+import Webcam from "react-webcam";
 import * as cocossd from "@tensorflow-models/coco-ssd"
 import { drawRect } from "./utilities";
+
+const socket = io.connect("http://localhost:3000")
 
 const Container = styled.div`
     padding: 20px;
@@ -30,7 +33,7 @@ const Video = (props) => {
     }, []);
 
     return (
-        <StyledVideo playsInline autoPlay ref={ref} />
+        <Webcam playsInline autoPlay ref={ref} />
     );
 }
 
@@ -55,9 +58,9 @@ const Room = (props) => {
         setInterval(() => {
           detect(net);
         }, 10);
-      };
+    };
     
-      const detect = async (net) => {
+    const detect = async (net) => {
         // Check data is available
         if (
           typeof userVideo.current !== "undefined" &&
@@ -65,14 +68,14 @@ const Room = (props) => {
           userVideo.current.video.readyState === 4
         ) {
           const video = userVideo.current.video;
-          const videoWidth = userVideo.current.video.videoWidth;
-          const videoHeight = userVideo.current.video.videoHeight;
+        //   const videoWidth = userVideo.current.video.videoWidth;
+        //   const videoHeight = userVideo.current.video.videoHeight;
     
-          userVideo.current.video.width = videoWidth;
-          userVideo.current.video.height = videoHeight;
+        //   userVideo.current.video.width = videoWidth;
+        //   userVideo.current.video.height = videoHeight;
     
-          userVideo.current.width = videoWidth;
-          userVideo.current.height = videoHeight;
+        //   canvasRef.current.width = videoWidth;
+        //   canvasRef.current.height = videoHeight;
     
           const obj = await net.detect(video);
           for (var i in obj){
@@ -82,13 +85,13 @@ const Room = (props) => {
           }
     
           // Draw mesh
-          const ctx = canvasRef.current.getContext("2d");
+        //   const ctx = canvasRef.current.getContext("2d");
     
-          drawRect(obj, ctx);
+        //   drawRect(obj, ctx);
         }
-      };
+    };
     
-      useEffect(()=>{runCoco()},[]);
+    useEffect(()=>{runCoco()},[]);
 
     useEffect(() => {
         socketRef.current = io.connect("/");
@@ -157,7 +160,7 @@ const Room = (props) => {
 
     return (
         <Container>
-            <StyledVideo muted ref={userVideo} autoPlay playsInline />
+            <Webcam muted ref={userVideo} autoPlay playsInline />
             {peers.map((peer, index) => {
                 return (
                     <Video key={index} peer={peer} />

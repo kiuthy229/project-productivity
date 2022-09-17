@@ -9,8 +9,8 @@ function App() {
   return (
     <BrowserRouter>
       <Switch>
-        {/* <Route path="/" exact component={CreateRoom} /> */}
-        <Route path="/" exact component={SingleCamera} />
+        <Route path="/" exact component={CreateRoom} />
+        {/* <Route path="/" exact component={SingleCamera} /> */}
         <Route path="/todolist" exact component={ToDoList} />
         <Route path="/room/:roomID" component={Room} />
       </Switch>
