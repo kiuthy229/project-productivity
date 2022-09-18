@@ -3,6 +3,7 @@ import io from "socket.io-client"
 import { useState, useEffect } from "react"
 import Chat from "./Chat";
 import Room from "./Room";
+import app from "../firebase-config";
 
 const socket = io.connect("http://localhost:3000");
 
@@ -18,6 +19,10 @@ function JoinRoom(props){
             // setShowChat(true);
         }
     }
+
+    const logout = () => {
+        app.auth().signOut();
+      }
 
     useEffect(() => {
         localStorage.setItem('username', JSON.stringify(username));
@@ -35,6 +40,7 @@ function JoinRoom(props){
                     <input type="text" placeholder="Your Name..." onChange={(e)=>setUsername(e.target.value)}/>
                     <input type="text" placeholder="Room ID" onChange={(e)=>setRoom(e.target.value)}/>
                     <button onClick={joinRoom}>Join A Room</button>
+                    <button onClick = {logout}>Logout</button>
                 </div>
             {/* ) : (
                  <Fragment>
