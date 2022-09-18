@@ -7,17 +7,19 @@ const ToDoList = () => {
   const [editIndex, setEditIndex] = useState(0)
 
 	const [todolist, setTodolist] = useState([])
+	const [todolistAlarm, setTodolistAlarm] = useState([])
 	
-	const todolistDueList = todolist.map(value => value.due)
+	const todolistDueList = todolistAlarm.map(value => value.due)
 	const submitTodolistItemHandler = (e) => {
 		e.preventDefault();
 		setTodolist((oldList) => 
-			[...oldList, {content: todolistContent, due: todolistDue}]
+			[...oldList, {content: todolistContent, due: todolistDue, done: false}]
 		)
+    setTodolistContent('')
 		console.log('aaaa', todolistDue)
 	}
 	const editPopperHandler = (index) => {
-    setShowEditPopper(!showEditPopper)
+    	setShowEditPopper(true)
 		setEditIndex(index)
 	}
 
@@ -28,25 +30,26 @@ const ToDoList = () => {
 	}
 	useEffect(
 		() => {
-			//var currentTime = 
+      setTodolistAlarm(todolist)
 			setInterval(() => {
-				
 				setCurrent(new Date().toLocaleString('zh-CN'))
-				 
 			}, 1000)
 			if (todolistDueList.includes(current)){
-        //let todolistIndex = 
         let tmpTodolistContent = todolist[todolistDueList.indexOf(current)].content
+        if (!todolist[todolistDueList.indexOf(current)].done){
+          alert(tmpTodolistContent)
+        }
         console.log(tmpTodolistContent)
-				alert(tmpTodolistContent)
+				
 			}
 		}
-	, [current]);
+	, [current, todolist]);
 	return (
 		<>
 			<h1>Todo List</h1>
 			<form onSubmit={submitTodolistItemHandler}>
 				<input
+          value={todolistContent}
 					id="todolistContent"
 					onChange={(e) => {
 						setTodolistContent(e.target.value)
@@ -56,8 +59,8 @@ const ToDoList = () => {
 					type="datetime-local"
 					id="todolistDue"
 					onChange={(e) => {
+            console.log(e.target.value)
 						setTodolistDue(new Date(e.target.value.replace('T', ' ')).toLocaleString('zh-CN'))
-						//setTodolistDue(e.target.v)
 					}}
 				></input>
 				<button>Add</button>
@@ -72,7 +75,12 @@ const ToDoList = () => {
                 due={todolist[index].due}
                 handleEdit={(e) => {
                   e.preventDefault()
-                  console.log(e.target[0].value)
+                  setShowEditPopper(false)
+                  let tmpTodolist = [...todolist]
+                  tmpTodolist[index].content = e.target[0].value
+                  tmpTodolist[index].due = new Date(e.target[1].value.replace('T', ' ')).toLocaleString('zh-CN')
+                  setTodolist(tmpTodolist);
+                  console.log(tmpTodolist[index])
 
 
 
@@ -94,9 +102,30 @@ const ToDoList = () => {
               <ToDoListItem
                 content={item.content}
                 due={item.due}
+                done={todolist[index].done}
                 editHandler={editPopperHandler}
                 deleteHandler={deleteHandler}
                 index={index}
+                handleAlarmListChecked={() => {
+                  const tmpTodolist = [...todolist]
+                  tmpTodolist[index].done = false
+                  const tmpAlarmList = [...todolistAlarm]
+                  tmpAlarmList.splice(index, 0, todolist[index])
+                  setTodolistAlarm(tmpAlarmList)
+                  setTodolist(tmpTodolist)
+                  console.log('tmpalaUn', tmpAlarmList)
+                }}
+                handleAlarmListUnchecked={() => {
+                  const tmpTodolist = [...todolist]
+                  tmpTodolist[index].done = true
+
+                  const tmpAlarmList = [...todolistAlarm]
+
+                  tmpAlarmList.splice(index, 1)
+                  setTodolistAlarm(tmpAlarmList)
+                  setTodolist(tmpTodolist)
+                  console.log('tmpalacheck', tmpAlarmList)
+                }}
               ></ToDoListItem>
             </>
 						
@@ -107,10 +136,14 @@ const ToDoList = () => {
 	);
 }
 
-const ToDoListItem = ({content, due, editHandler, deleteHandler, index}) => {
+const ToDoListItem = ({content, due, editHandler, deleteHandler, index, handleAlarmListChecked, handleAlarmListUnchecked, done}) => {
 	return (
 		<div style={{display: "flex"}}>
-			<input type="checkbox" ></input>
+			<input
+        checked={done}
+        type="checkbox"
+        onClick={done ? handleAlarmListChecked : handleAlarmListUnchecked}  
+      ></input>
 			<div>{content}</div>
 			<div>{due}</div>
 			<button onClick={() => editHandler(index)}>Edit</button>
@@ -123,10 +156,11 @@ const EditPopper = ({showEditPopper, content, due, handleEdit}) => {
 	return(
 		<div style={{display: showEditPopper ? "block" : "none"}}>
       <form onSubmit={handleEdit}>
-        <input value={content}></input>
+        <input
+          defaultValue={content}></input>
         <input
           type="datetime-local"
-          value={new Date(due).toISOString().substring(0, new Date(due).toISOString().length - 1)}
+          defaultValue={new Date(due).toISOString().substring(0, new Date(due).toISOString().length - 1)}
         ></input>
         <button>Save</button>
       </form>
