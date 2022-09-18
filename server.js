@@ -15,26 +15,17 @@ io.on('connection', socket => {
 
     socket.on("join_room", roomID => {
         console.log("joined")
-        // if (users[roomID]) {
-        //     const length = users[roomID].length;
-        //     if (length === 4) {
-        //         socket.emit("room full");
-        //         return;
-        //     }
-        //     else{
-        //         socket.join(roomID)
-        //         console.log(`User with iD : ${socket.id} joined room ${data}`)
-        //         users[roomID].push(socket.id);
-        //     }
-        // } else {          
-            socket.join(roomID)
-            console.log(`User with iD : ${socket.id} joined room ${roomID}`)
-        //     users[roomID] = [socket.id];
-        // }
-        // socketToRoom[socket.id] = roomID;
-        // const usersInThisRoom = users[roomID].filter(id => id !== socket.id);
+        // socket.join(roomID)
+        console.log(`User with iD : ${socket.id} joined room ${roomID}`)
+        if (users[roomID]) {
+            users[roomID].push(socket.id);
+        } else {
+            users[roomID] = [socket.id];
+        }
+        socketToRoom[socket.id] = roomID;
+        const usersInThisRoom = users[roomID].filter(id => id !== socket.id);
 
-        // socket.emit("all users", usersInThisRoom);
+        socket.emit("all users", usersInThisRoom);
     });
 
     socket.on("send message", (data) => {

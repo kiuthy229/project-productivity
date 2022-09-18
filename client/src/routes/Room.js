@@ -5,7 +5,8 @@ import styled from "styled-components";
 import * as tf from "@tensorflow/tfjs";
 import Webcam from "react-webcam";
 import * as cocossd from "@tensorflow-models/coco-ssd"
-import { drawRect } from "./utilities";
+import Chat from "./Chat";
+import { useParams } from "react-router-dom";
 
 const socket = io.connect("http://localhost:3000")
 
@@ -16,11 +17,6 @@ const Container = styled.div`
     width: 90%;
     margin: auto;
     flex-wrap: wrap;
-`;
-
-const StyledVideo = styled.video`
-    height: 40%;
-    width: 50%;
 `;
 
 const Video = (props) => {
@@ -48,8 +44,19 @@ const Room = (props) => {
     const socketRef = useRef();
     const userVideo = useRef();
     const peersRef = useRef([]);
-    const canvasRef = useRef();
-    const roomID = props.match.params.roomID;
+    // const roomID = useParams();
+
+    const [username, setUsername] = useState(() => {
+        const saved = window.localStorage.getItem("username");
+        const initialValue = JSON.parse(saved);
+        return initialValue || "";
+    });
+
+    const [roomID, setRoomID] = useState(() => {
+        const saved = window.localStorage.getItem("username");
+        const initialValue = JSON.parse(saved);
+        return initialValue || "";
+    });
 
     const runCoco = async () => {
         const net = await cocossd.load();
@@ -77,7 +84,7 @@ const Room = (props) => {
           const obj = await net.detect(video);
           for (var i in obj){
             if(obj[i].class === "cell phone" || obj[i].class === "remote"){
-              console.log(`are you holding a ${obj[i].class}`)
+              alert(`are you holding a ${obj[i].class}`)
             }
           }
         }
@@ -158,6 +165,7 @@ const Room = (props) => {
                     <Video key={index} peer={peer} />
                 );
             })}
+            <Chat socket={socket} username={username} room={roomID} />
         </Container>
     );
 };
