@@ -45,10 +45,32 @@ const ToDoList = () => {
 		}
 	, [current, todolist]);
 	return (
-		<>
+		<div
+      style={{
+        background: "#FED6D7",
+        padding: "5vh",
+        height: "25vh",
+        borderRadius: "10px",
+        margin: "1vw", 
+        height: "85vh", 
+      }}
+    >
 			<h1>Todo List</h1>
-			<form onSubmit={submitTodolistItemHandler}>
+			<form onSubmit={submitTodolistItemHandler}
+        style={{
+          padding: "auto 0"
+        }}
+      >
 				<input
+          style={{
+            padding: "2vh 1vw",
+            margin: " 1vh auto",
+            border: "none", 
+            borderRadius: "10px",
+            outline: "none",
+            
+            width: "92%"
+          }}
           value={todolistContent}
 					id="todolistContent"
 					onChange={(e) => {
@@ -56,6 +78,15 @@ const ToDoList = () => {
 					}}
 				></input>
 				<input
+          style={{
+            padding: "2vh 1vw",
+            margin: " 1vh auto",
+            border: "none", 
+            borderRadius: "10px",
+            outline: "none",
+            
+            width: "92%"
+          }}
 					type="datetime-local"
 					id="todolistDue"
 					onChange={(e) => {
@@ -63,7 +94,17 @@ const ToDoList = () => {
 						setTodolistDue(new Date(e.target.value.replace('T', ' ')).toLocaleString('zh-CN'))
 					}}
 				></input>
-				<button>Add</button>
+				<button
+          style={{
+            padding: "2vh 2vw",
+            margin: " 2vh auto",
+            border: "none", 
+            borderRadius: "10px",
+            background: "#EB6CAC",
+            color: "white", 
+            fontWeight: "bolder"
+          }}
+        >Add</button>
 			</form>
 			<div>
 				{todolist.map((item, index) => {
@@ -81,22 +122,6 @@ const ToDoList = () => {
                   tmpTodolist[index].due = new Date(e.target[1].value.replace('T', ' ')).toLocaleString('zh-CN')
                   setTodolist(tmpTodolist);
                   console.log(tmpTodolist[index])
-
-
-
-
-
-
-
-
-
-
-
-//sosossoos
-
-
-
-
                 }}
               ></EditPopper>
               <ToDoListItem
@@ -132,22 +157,63 @@ const ToDoList = () => {
 					);
 				})}
 			</div>
-		</>
+		</div>
 	);
 }
 
 const ToDoListItem = ({content, due, editHandler, deleteHandler, index, handleAlarmListChecked, handleAlarmListUnchecked, done}) => {
 	return (
-		<div style={{display: "flex"}}>
+		<div style={{
+      display: "flex",
+      alignContent: "center",
+      justifyContent: "space-between"
+    }}>
 			<input
         checked={done}
         type="checkbox"
         onClick={done ? handleAlarmListChecked : handleAlarmListUnchecked}  
       ></input>
-			<div>{content}</div>
-			<div>{due}</div>
-			<button onClick={() => editHandler(index)}>Edit</button>
-			<button onClick={() => deleteHandler(index)}>Delete</button>
+      <div>
+        <div
+        style={{
+          //padding: "2vh 1vw",
+          fontWeight: "bold"
+        }}
+      >{content}</div>
+			<div
+        // style={{
+        //   padding: "2vh 1vw",
+          
+        // }}
+      >{due}</div>
+      </div>
+			
+      <div>
+      <button
+        style={{
+          padding: "2vh 1vw",
+          margin: " 0.5vh auto",
+          border: "none", 
+          borderRadius: "10px",
+          background: "#EB6CAC",
+          color: "white", 
+          fontWeight: "bolder",
+          marginRight: "1vh"
+        }}
+        onClick={() => editHandler(index)}>Edit</button>
+			<button
+        style={{
+          padding: "2vh 1vw",
+          margin: " 0.5vh auto",
+          border: "none", 
+          borderRadius: "10px",
+          background: "#EB6CAC",
+          color: "white", 
+          fontWeight: "bolder"
+        }}
+        onClick={() => deleteHandler(index)}>Delete</button>
+      </div>
+			
 		</div>
 	);
 }

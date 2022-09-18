@@ -55,8 +55,16 @@ const MusicPlayer = () => {
     }
   }
   return(
-    <>
-      <h1>Music Player</h1>
+    <div
+      style={{
+        background: "#FED6D7",
+        padding: "5vh",
+        height: "25vh",
+        borderRadius: "10px",
+        margin: "1vw"
+      }}
+    >
+      <h3>Music Player</h3>
       <div>
         <h3>{PLAYLIST_DATA[currentSongIndex].title}</h3>
         <div>{PLAYLIST_DATA[currentSongIndex].artist}</div>
@@ -66,17 +74,47 @@ const MusicPlayer = () => {
         ref={audioElement}
       ></audio>
       <button
+        style={{
+          padding: "2vh 1vw",
+          margin: " 0.5vh auto",
+          border: "none", 
+          borderRadius: "10px",
+          background: "#EB6CAC",
+          color: "white", 
+          fontWeight: "bolder",
+          marginRight: "0.5vh"
+        }}
         onClick={() => skip(false)}
       >Prev</button>
       <button
+        style={{
+          padding: "2vh 1vw",
+          margin: " 0.5vh auto",
+          border: "none", 
+          borderRadius: "10px",
+          background: "#EB6CAC",
+          color: "white", 
+          fontWeight: "bolder",
+          marginRight: "0.5vh"
+        }}
         onClick={() => {
           setIsPlaying(!isPlaying)
         }}
       >Play</button>
       <button
+        style={{
+          padding: "2vh 1vw",
+          margin: " 0.5vh auto",
+          border: "none", 
+          borderRadius: "10px",
+          background: "#EB6CAC",
+          color: "white", 
+          fontWeight: "bolder",
+          marginRight: "0.5vh"
+        }}
         onClick={() => skip()}
       >Next</button>
-    </>
+    </div>
   )
 }
 export default MusicPlayer;

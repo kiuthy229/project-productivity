@@ -25,9 +25,26 @@ function Chat ({socket, username, room}) {
             setMessageList((list) => [...list, data])
         })
     }, [socket])
-    return <div className="chat-window">
-            <div className="chat-header">
-            <p>Live Chat</p>
+    return <div
+                style={{
+                    background: "white",
+                    padding: "5vh",
+                    height: "18vh",
+                    borderRadius: "10px",
+                    margin: "0.5vw",
+                    overflow: "auto",
+                    width: "78%",
+                }}  
+                className="chat-window">
+            <div
+                className="chat-header"
+            >
+            <h3
+                style={{
+                    fontWeight: "bold",
+                    color: "#EB6CAC"
+                }}
+            >Live Chat</h3>
             </div>
             <div className="chat-body">
             <div className="message-container">
@@ -39,11 +56,11 @@ function Chat ({socket, username, room}) {
                     >
                     <div>
                         <div className="message-content">
-                        <p>{messageContent.message}</p>
-                        </div>
-                        <div className="message-meta">
-                        <p id="time">{messageContent.time}</p>
-                        <p id="author">{messageContent.author}</p>
+                            <p>{messageContent.message}</p>
+                            </div>
+                            <div className="message-meta">
+                            <p id="time">{messageContent.time}</p>
+                            <p id="author">{messageContent.author}</p>
                         </div>
                     </div>
                     </div>
@@ -53,6 +70,14 @@ function Chat ({socket, username, room}) {
             </div>
             <div className="chat-footer">
             <input
+                style={{
+                    padding: "2vh 1vw",
+                    margin: " 1vh auto",
+                    border: "none", 
+                    borderRadius: "10px",
+                    outline: "none", 
+                    background: "#FED6D7"
+                }}
                 type="text"
                 value={currentMessage}
                 placeholder="Hey..."
@@ -63,7 +88,19 @@ function Chat ({socket, username, room}) {
                 event.key === "Enter" && sendMessage();
                 }}
             />
-            <button onClick={sendMessage}>&#9658;</button>
+            <button
+                style={{
+                    padding: "2vh 1vw",
+                    margin: " 0.5vh auto",
+                    border: "none", 
+                    borderRadius: "10px",
+                    background: "#EB6CAC",
+                    color: "white", 
+                    fontWeight: "bolder",
+                    marginLeft: "0.8vh",
+
+                  }}
+                onClick={sendMessage}>&#9658;</button>
             </div>
         </div>
 }
