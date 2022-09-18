@@ -6,12 +6,14 @@ import MusicPlayer from './routes/MusicPlayer';
 import JoinRoom from './routes/JoinRoom'
 import DownloadApp from './routes/DownloadApp';
 import Room from "./routes/Room";
+import Login from './routes/Login';
 
 function App() {
   return (
     <BrowserRouter>
       <Switch>
         <Route path="/" exact component={JoinRoom} />
+        <Route path="/login" exact component={Login} />
         <Route path="/scan-code" exact component={DownloadApp} />
         <Route path="/todolist" exact component={ToDoList} />
         <Route path="/musicplayer" exact component={MusicPlayer} />

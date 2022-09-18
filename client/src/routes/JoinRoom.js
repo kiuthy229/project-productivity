@@ -5,6 +5,7 @@ import ToDoList from './ToDoList';
 import MusicPlayer from "./MusicPlayer";
 import Chat from "./Chat";
 import Room from "./Room";
+import app from "../firebase-config";
 
 const socket = io.connect("http://localhost:3000");
 
@@ -20,6 +21,10 @@ function JoinRoom(props){
             // setShowChat(true);
         }
     }
+
+    const logout = () => {
+        app.auth().signOut();
+      }
 
     useEffect(() => {
         localStorage.setItem('username', JSON.stringify(username));
@@ -85,6 +90,17 @@ function JoinRoom(props){
                         }}
                         onClick={joinRoom}
                       >Join</button>
+                      <button
+                        style={{
+                          padding: "2vh 1vw",
+                          margin: " 1vh 3vw",
+                          border: "none", 
+                          borderRadius: "10px",
+                          background: "#EB6CAC",
+                          color: "white", 
+                          fontWeight: "bolder"
+                        }}
+                      onClick = {logout}>Logout</button>
                     </div>
                     
                     <Room></Room>
