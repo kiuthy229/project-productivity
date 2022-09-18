@@ -48,7 +48,7 @@ const Room = (props) => {
     const socketRef = useRef();
     const userVideo = useRef();
     const peersRef = useRef([]);
-    const canvasRef = useRef(null);
+    const canvasRef = useRef();
     const roomID = props.match.params.roomID;
 
     const runCoco = async () => {
@@ -68,26 +68,18 @@ const Room = (props) => {
           userVideo.current.video.readyState === 4
         ) {
           const video = userVideo.current.video;
-        //   const videoWidth = userVideo.current.video.videoWidth;
-        //   const videoHeight = userVideo.current.video.videoHeight;
+          const videoWidth = userVideo.current.video.videoWidth;
+          const videoHeight = userVideo.current.video.videoHeight;
     
-        //   userVideo.current.video.width = videoWidth;
-        //   userVideo.current.video.height = videoHeight;
-    
-        //   canvasRef.current.width = videoWidth;
-        //   canvasRef.current.height = videoHeight;
+          userVideo.current.video.width = videoWidth;
+          userVideo.current.video.height = videoHeight;
     
           const obj = await net.detect(video);
           for (var i in obj){
             if(obj[i].class === "cell phone" || obj[i].class === "remote"){
-              console.log("are you holding a phone?")
+              console.log(`are you holding a ${obj[i].class}`)
             }
           }
-    
-          // Draw mesh
-        //   const ctx = canvasRef.current.getContext("2d");
-    
-        //   drawRect(obj, ctx);
         }
     };
     
@@ -97,7 +89,7 @@ const Room = (props) => {
         socketRef.current = io.connect("/");
         navigator.mediaDevices.getUserMedia({ video: videoConstraints, audio: true }).then(stream => {
             userVideo.current.srcObject = stream;
-            socketRef.current.emit("join room", roomID);
+            socketRef.current.emit("join_room", roomID);
             socketRef.current.on("all users", users => {
                 const peers = [];
                 users.forEach(userID => {

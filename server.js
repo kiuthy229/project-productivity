@@ -3,7 +3,7 @@ const express = require("express");
 const http = require("http");
 const app = express();
 const server = http.createServer(app);
-const socket = require("socket.io");
+const socket = require('socket.io');
 const io = socket(server);
 
 const users = {};
@@ -11,22 +11,36 @@ const users = {};
 const socketToRoom = {};
 
 io.on('connection', socket => {
-    socket.on("join room", roomID => {
-        if (users[roomID]) {
-            const length = users[roomID].length;
-            if (length === 4) {
-                socket.emit("room full");
-                return;
-            }
-            users[roomID].push(socket.id);
-        } else {
-            users[roomID] = [socket.id];
-        }
-        socketToRoom[socket.id] = roomID;
-        const usersInThisRoom = users[roomID].filter(id => id !== socket.id);
+    console.log(`User connected ${socket.id}`)
 
-        socket.emit("all users", usersInThisRoom);
+    socket.on("join_room", roomID => {
+        console.log("joined")
+        // if (users[roomID]) {
+        //     const length = users[roomID].length;
+        //     if (length === 4) {
+        //         socket.emit("room full");
+        //         return;
+        //     }
+        //     else{
+        //         socket.join(roomID)
+        //         console.log(`User with iD : ${socket.id} joined room ${data}`)
+        //         users[roomID].push(socket.id);
+        //     }
+        // } else {          
+            socket.join(roomID)
+            console.log(`User with iD : ${socket.id} joined room ${roomID}`)
+        //     users[roomID] = [socket.id];
+        // }
+        // socketToRoom[socket.id] = roomID;
+        // const usersInThisRoom = users[roomID].filter(id => id !== socket.id);
+
+        // socket.emit("all users", usersInThisRoom);
     });
+
+    socket.on("send message", (data) => {
+        socket.to(data.room).emit("receive message", data);
+      });
+    
 
     socket.on("sending signal", payload => {
         io.to(payload.userToSignal).emit('user joined', { signal: payload.signal, callerID: payload.callerID });

@@ -4,6 +4,7 @@ import CreateRoom from "./routes/CreateRoom";
 import SingleCamera from "./routes/SingleCamera";
 import ToDoList from './routes/ToDoList';
 import MusicPlayer from './routes/MusicPlayer';
+import JoinRoom from './routes/JoinRoom'
 import Room from "./routes/Room";
 
 function App() {
@@ -11,6 +12,7 @@ function App() {
     <BrowserRouter>
       <Switch>
         <Route path="/" exact component={CreateRoom} />
+        <Route path="/join" exact component={JoinRoom} />
         {/* <Route path="/" exact component={SingleCamera} /> */}
         <Route path="/todolist" exact component={ToDoList} />
         <Route path="/musicplayer" exact component={MusicPlayer} />
