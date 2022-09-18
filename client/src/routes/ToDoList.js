@@ -3,6 +3,9 @@ const ToDoList = () => {
 	const [todolistContent, setTodolistContent] = useState('')
 	const [todolistDue, setTodolistDue] = useState('')
 	const [current, setCurrent] = useState('')
+  const [showEditPopper, setShowEditPopper] = useState(false)
+  const [editIndex, setEditIndex] = useState(0)
+
 	const [todolist, setTodolist] = useState([])
 	
 	const todolistDueList = todolist.map(value => value.due)
@@ -13,10 +16,9 @@ const ToDoList = () => {
 		)
 		console.log('aaaa', todolistDue)
 	}
-	const editHandler = (index) => {
-		// const tmpTodolist = [...todolist]
-		// tmpTodolist.splice(index, 1)
-		// setTodolist(tmpTodolist)
+	const editPopperHandler = (index) => {
+    setShowEditPopper(!showEditPopper)
+		setEditIndex(index)
 	}
 
 	const deleteHandler = (index) => {
@@ -33,42 +35,15 @@ const ToDoList = () => {
 				 
 			}, 1000)
 			if (todolistDueList.includes(current)){
-				alert('sjd')
+        //let todolistIndex = 
+        let tmpTodolistContent = todolist[todolistDueList.indexOf(current)].content
+        console.log(tmpTodolistContent)
+				alert(tmpTodolistContent)
 			}
-				// todolist.forEach((value, i) => {
-				// 	if (current === value.due){
-				// 		console.log(current, value.due)
-				// 		const tmpTodolist = [...todolist]
-				// 		tmpTodolist.splice(i, 1)
-				// 		setTodolist(tmpTodolist)
-				// 		alert('sjd')
-				// 	}
-				// 	else {
-				// 		console.log('meh', current, value.due)
-				// 	}
-				// for (let todo of todolist) {
-				// 	if (current === todo.due){
-				// 		console.log(current, todo.due)
-						
-				// 		alert('sjd')
-				// 		break;
-				// 	}
-				// 	else {
-				// 		console.log('meh', current, todo.due)
-				// 	}
-				// }
-				// todolist.forEach((todo) => {
-					
-				// })
-			
-			console.log(current)
-			console.log(todolist)
-			//if ()
 		}
 	, [current]);
 	return (
 		<>
-			<EditPopper></EditPopper>
 			<h1>Todo List</h1>
 			<form onSubmit={submitTodolistItemHandler}>
 				<input
@@ -90,13 +65,41 @@ const ToDoList = () => {
 			<div>
 				{todolist.map((item, index) => {
 					return(
-						<ToDoListItem
-							content={item.content}
-							due={item.due}
-							editHandler={editHandler}
-							deleteHandler={deleteHandler}
-							index={index}
-						></ToDoListItem>
+            <>
+              <EditPopper
+                showEditPopper={showEditPopper && editIndex === index}
+                content={todolist[index].content}
+                due={todolist[index].due}
+                handleEdit={(e) => {
+                  e.preventDefault()
+                  console.log(e.target[0].value)
+
+
+
+
+
+
+
+
+
+
+
+//sosossoos
+
+
+
+
+                }}
+              ></EditPopper>
+              <ToDoListItem
+                content={item.content}
+                due={item.due}
+                editHandler={editPopperHandler}
+                deleteHandler={deleteHandler}
+                index={index}
+              ></ToDoListItem>
+            </>
+						
 					);
 				})}
 			</div>
@@ -116,11 +119,18 @@ const ToDoListItem = ({content, due, editHandler, deleteHandler, index}) => {
 	);
 }
 
-const EditPopper = (showEditPopper, content, due) => {
+const EditPopper = ({showEditPopper, content, due, handleEdit}) => {
 	return(
-		<>
-		
-		</>
+		<div style={{display: showEditPopper ? "block" : "none"}}>
+      <form onSubmit={handleEdit}>
+        <input value={content}></input>
+        <input
+          type="datetime-local"
+          value={new Date(due).toISOString().substring(0, new Date(due).toISOString().length - 1)}
+        ></input>
+        <button>Save</button>
+      </form>
+		</div>
 	);
 }
 
