@@ -138,3 +138,14 @@
   background-color: #FED6D7;
   border-radius: 16px;
 }
+.scan{
+  position: relative;
+  top: 10px;
+  left: 80px;
+}
+.inline{
+  position: relative;
+  top: 10px;
+  left: 320px;
+  padding: 30px 100px 100px 0px;
+}

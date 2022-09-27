@@ -7,6 +7,7 @@ import Webcam from "react-webcam";
 import * as cocossd from "@tensorflow-models/coco-ssd"
 import Chat from "./Chat";
 import { useParams } from "react-router-dom";
+import ToDoList from './ToDoList';
 
 const socket = io.connect("http://localhost:3000")
 
@@ -29,7 +30,7 @@ const Video = (props) => {
     }, []);
 
     return (
-        <Webcam playsInline autoPlay ref={ref} />
+        <Webcam width={300} height={300} playsInline autoPlay ref={ref} />
     );
 }
 
